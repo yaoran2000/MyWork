@@ -37,14 +37,15 @@ for ch in range(0x4e00,0x9fa6):
 
   score_str = b'<div class="name_num">'
   p = html_str.find(score_str)
-  if not p == -1:
-      score_bytes = html_str[p+22:p+24]
-      score = str(score_bytes).replace('<','').replace('>','')
-      #输出到文件
-      resultFile.write(babynamel)
-      resultFile.write(score.encode('utf-8'))
-      i = i + 1
-      print('\n %s', i)
-      print('%s %s', babynamel,score.encode('utf-8'))
+  print(p)
+  # if not p == -1:
+  #     score_bytes = html_str[p+22:p+24]
+  #     score = str(score_bytes).replace('<','').replace('>','')
+  #     #输出到文件
+  #     resultFile.write(babynamel)
+  #     resultFile.write(score.encode('utf-8'))
+  #     i = i + 1
+  #     print('\n %s', i)
+  #     print('%s %s', babynamel,score.encode('utf-8'))
 
 resultFile.close();
