@@ -1,9 +1,17 @@
+import sys
 #Read Excel Library
 import xlrd
 #Write Excel Library
 from pyexcelerate import Workbook
 #RegEx Support
 import re
+
+
+#	HJDX Biz Excel Combine Tool V1.0
+#	Author: Yao Ran
+#	Usage:
+#		$ python3 combExcel.py Source/201703.xls Target/201703c.xlsx
+
 
 def writeHeaders(targetBook):
 	ws = targetBook.new_sheet("Result")
@@ -14,7 +22,7 @@ def writeHeaders(targetBook):
 
 def processSheetTable(sourceTable,targetBookSheet,startline):
 	#print(sourceTable.nrows)
-	print(startline)
+	print("%d rows processsed"%startline)
 
 	for j in range(1,sourceTable.nrows):
 		for k in range(1,16):
@@ -24,24 +32,33 @@ def processSheetTable(sourceTable,targetBookSheet,startline):
 	return targetBookSheet, startline + sourceTable.nrows - 1
 
 
-
 if __name__ == "__main__":
 
-	targetWorkBook = Workbook()
-	targetWorkSheet = writeHeaders(targetWorkBook)
+	#for arg in sys.argv:
+	#	print(arg)
+	if len(sys.argv) == 3:
 
-	sourceBook = xlrd.open_workbook("/Users/yao/MyWork/combinExcel/201701.xlsx")
+		targetWorkBook = Workbook()
+		targetWorkSheet = writeHeaders(targetWorkBook)
 
-	sheetlist = sourceBook.sheet_names()
+		#sourceBook = xlrd.open_workbook("/Users/yao/MyWork/combinExcel/Source/201701.xlsx")
+		sourceBook = xlrd.open_workbook(sys.argv[1])
+		sheetlist = sourceBook.sheet_names()
 
-	#print(sheetlist)
+		#print(sheetlist)
 
-	p = 1
-	for i in range(0, len(sheetlist)):
-		if re.match('\d{8}',sheetlist[i]):	#Exclude Non-number Sheet eg: 20170101
-			#print(sheetlist[i])
-			#processSheetTable(sourceBook.sheet_by_name(sheetlist[i]))
-			targetWorkSheet, p = processSheetTable(sourceBook.sheet_by_name(sheetlist[i]),targetWorkSheet,p)
+		p = 1
+		for i in range(0, len(sheetlist)):
+			if re.match('\d{8}',sheetlist[i]):	#Exclude Non-number Sheet eg: 20170101
+				#print(sheetlist[i])
+				#processSheetTable(sourceBook.sheet_by_name(sheetlist[i]))
+				targetWorkSheet, p = processSheetTable(sourceBook.sheet_by_name(sheetlist[i]),targetWorkSheet,p)
 
-	targetWorkBook.save("/Users/yao/MyWork/combinExcel/result.xlsx")
+		targetWorkBook.save(sys.argv[2])
+		#targetWorkBook.save("/Users/yao/MyWork/combinExcel/Target/result.xlsx")
+	else:
+		print("Usage: python3 combExcel.py SourceExcelFile TargetExcelFile")
+
+
+
 
